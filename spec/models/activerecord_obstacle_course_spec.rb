@@ -37,12 +37,14 @@ describe 'ActiveRecord Obstacle Course' do
 
   it 'finds orders by amount' do
     # ----------------------- Using Ruby -------------------------
-    orders_of_500 = Order.all.select { |order| order.amount == 500 }
-    orders_of_200 = Order.all.select { |order| order.amount == 200 }
+    # orders_of_500 = Order.all.select { |order| order.amount == 500 }
+    # orders_of_200 = Order.all.select { |order| order.amount == 200 }
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders_of_500 = Order.where(amount: 500)
+    orders_of_200 = Order.where(amount: 200)
+    # where returns a collection of records vs. find which only returns 1
     # ------------------------------------------------------------
 
     # Expectation
@@ -52,11 +54,13 @@ describe 'ActiveRecord Obstacle Course' do
 
   it 'finds order id of smallest order' do
     # ----------------------- Using Raw SQL ----------------------
-    order_id = ActiveRecord::Base.connection.execute('SELECT id FROM orders ORDER BY amount ASC LIMIT 1').first['id']
+    # order_id = ActiveRecord::Base.connection.execute('SELECT id FROM orders ORDER BY amount ASC LIMIT 1').first['id']
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    # order_id = Order.select(:id).order(:amount).first.id
+    order_id = Order.select(:id).order(:amount).limit(1).first.id
+    # limit(1) prevents active record from fetching all rows to run ruby on
     # ------------------------------------------------------------
 
     # Expectation
